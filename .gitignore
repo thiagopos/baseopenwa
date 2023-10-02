@@ -1,0 +1,8 @@
+node_modules
+yarn.lock
+teste.js
+# managed
+**.data.json
+**.node-persist**
+**_IGNORE_**
+# end managed

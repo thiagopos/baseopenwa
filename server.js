@@ -6,7 +6,7 @@ wa.create({
   authTimeout: 60,
   blockCrashLogs: true,
   disableSpins: true,
-  headless: "new",
+  headless: "new", // Biblioteca Puppeteer, abre em modo headless, "false" para visualizar o navegador, "true" deprecated.
   hostNotificationLang: 'PT_BR', // Idioma das notificações do host (servidor)
   logConsole: false,
   popup: true,
@@ -20,14 +20,14 @@ function iniciar(client) {
   client.onMessage(async message => {
     const { from, body } = message;
 
-    if (body.toLowerCase() === '_oi' || body.toLowerCase() === 'opções') {
+    if (body.toLowerCase() === 'opções') {
       // Se o usuário enviar "oi" ou "opções", responda com o menu
       await client.sendText(from, 'Por favor, selecione uma opção:\nA. Opção A\nB. Opção B\nC. Opção C\nD. Opção D\nE. Encerrar Conversa');
       estadoConversa[from] = {
-        estado: 'menu',
-        ultimaAtividade: Date.now(), // Armazena o carimbo de data/hora da última atividade
+        estado: 'opt',
+        ultimaAtividade: Date.now(), // Armazena o timestamp da última atividade
       };
-    } else if (estadoConversa[from] && estadoConversa[from].estado === 'menu') {
+    } else if (estadoConversa[from] && estadoConversa[from].estado === 'opt') {
       // Lidar com as opções do menu
       switch (body.toLowerCase()) {
         case 'a':
@@ -43,7 +43,7 @@ function iniciar(client) {
           await client.sendText(from, 'Você selecionou a Opção D.');
           break;
         case 'e':
-          await client.sendText(from, 'Encerrando a conversa. Adeus!');
+          await client.sendText(from, 'Conversa finalizada.');
           // Remover o estado da conversa ao encerrar a conversa
           delete estadoConversa[from];
           break;
